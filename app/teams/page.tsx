@@ -1,8 +1,14 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SocialShare from '@/components/SocialShare';
+import { motion } from 'framer-motion';
 
 const teams = [
   {
+    id: 'korea',
     country: '한국',
     flag: '🇰🇷',
     captain: '김동현',
@@ -12,6 +18,7 @@ const teams = [
     color: 'from-blue-900/40'
   },
   {
+    id: 'philippines',
     country: '필리핀',
     flag: '🇵🇭',
     captain: 'Manny Pacquiao',
@@ -21,6 +28,7 @@ const teams = [
     color: 'from-yellow-900/40'
   },
   {
+    id: 'australia',
     country: '호주',
     flag: '🇦🇺',
     captain: 'Robert Whittaker',
@@ -30,6 +38,7 @@ const teams = [
     color: 'from-green-900/40'
   },
   {
+    id: 'thailand',
     country: '태국',
     flag: '🇹🇭',
     captain: 'Ploy Nuannaree Olsen',
@@ -39,6 +48,7 @@ const teams = [
     color: 'from-red-900/40'
   },
   {
+    id: 'mongolia',
     country: '몽골',
     flag: '🇲🇳',
     captain: 'Orkhonbayar Bayarsaikhan',
@@ -48,6 +58,7 @@ const teams = [
     color: 'from-purple-900/40'
   },
   {
+    id: 'japan',
     country: '일본',
     flag: '🇯🇵',
     captain: 'TBA',
@@ -57,6 +68,7 @@ const teams = [
     color: 'from-red-800/40'
   },
   {
+    id: 'turkey',
     country: '터키',
     flag: '🇹🇷',
     captain: 'TBA',
@@ -66,6 +78,7 @@ const teams = [
     color: 'from-orange-900/40'
   },
   {
+    id: 'indonesia',
     country: '인도네시아',
     flag: '🇮🇩',
     captain: 'TBA',
@@ -77,6 +90,52 @@ const teams = [
 ];
 
 export default function TeamsPage() {
+  const [votes, setVotes] = useState<Record<string, number>>({});
+  const [userVotes, setUserVotes] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    // Load votes from localStorage
+    const savedVotes = localStorage.getItem('teamVotes');
+    const savedUserVotes = localStorage.getItem('userVotes');
+
+    if (savedVotes) {
+      setVotes(JSON.parse(savedVotes));
+    } else {
+      // Initialize with default votes
+      const initialVotes: Record<string, number> = {};
+      teams.forEach(team => {
+        initialVotes[team.id] = Math.floor(Math.random() * 1000) + 500;
+      });
+      setVotes(initialVotes);
+    }
+
+    if (savedUserVotes) {
+      setUserVotes(new Set(JSON.parse(savedUserVotes)));
+    }
+  }, []);
+
+  const handleVote = (teamId: string) => {
+    const newVotes = { ...votes };
+    const newUserVotes = new Set(userVotes);
+
+    if (newUserVotes.has(teamId)) {
+      // Remove vote
+      newVotes[teamId] = (newVotes[teamId] || 0) - 1;
+      newUserVotes.delete(teamId);
+    } else {
+      // Add vote
+      newVotes[teamId] = (newVotes[teamId] || 0) + 1;
+      newUserVotes.add(teamId);
+    }
+
+    setVotes(newVotes);
+    setUserVotes(newUserVotes);
+
+    // Save to localStorage
+    localStorage.setItem('teamVotes', JSON.stringify(newVotes));
+    localStorage.setItem('userVotes', JSON.stringify(Array.from(newUserVotes)));
+  };
+
   return (
     <>
       <Header />
@@ -90,6 +149,12 @@ export default function TeamsPage() {
             <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto">
               아시아 8개국 최강 엘리트들의 치열한 국가 대항전
             </p>
+            <p className="text-md text-gray-400 text-center max-w-2xl mx-auto mt-4">
+              💗 좋아하는 팀에 투표하세요!
+            </p>
+            <div className="flex justify-center mt-6">
+              <SocialShare title="Physical: Asia 참가국 보기" description="8개국 최강 엘리트들의 팀 정보를 확인하세요!" />
+            </div>
           </div>
         </section>
 
@@ -98,8 +163,11 @@ export default function TeamsPage() {
           <div className="container mx-auto px-4">
             <div className="grid gap-12 max-w-6xl mx-auto">
               {teams.map((team, index) => (
-                <div
+                <motion.div
                   key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className={`flex flex-col ${
                     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                   } gap-8 bg-gradient-to-br ${team.color} to-black border border-red-900/30 rounded-xl p-8 hover:border-red-500/50 transition-all`}
@@ -113,7 +181,22 @@ export default function TeamsPage() {
 
                   {/* Team Info */}
                   <div className="flex-1">
-                    <h2 className="text-4xl font-bold text-white mb-2">{team.country}</h2>
+                    <div className="flex justify-between items-start mb-2">
+                      <h2 className="text-4xl font-bold text-white">{team.country}</h2>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => handleVote(team.id)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all ${
+                          userVotes.has(team.id)
+                            ? 'bg-red-600 text-white'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        <span className="text-xl">{userVotes.has(team.id) ? '❤️' : '🤍'}</span>
+                        <span>{votes[team.id] || 0}</span>
+                      </motion.button>
+                    </div>
                     <div className="mb-4">
                       <p className="text-red-400 font-semibold text-xl">주장: {team.captain}</p>
                       <p className="text-gray-400">{team.captainInfo}</p>
@@ -135,7 +218,7 @@ export default function TeamsPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

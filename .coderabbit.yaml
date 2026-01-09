@@ -1,0 +1,31 @@
+# CodeRabbit Configuration File
+# Visit https://docs.coderabbit.ai for full documentation
+
+language: ko  # 한국어 리뷰 코멘트
+early_access: false
+reviews:
+  profile: chill  # 리뷰 강도: chill, assertive
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false  # 리뷰 시작 시 시 작성 안함
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - master
+  tools:
+    shellcheck:
+      enabled: true
+    ruff:
+      enabled: true
+    markdownlint:
+      enabled: true
+    biome:
+      enabled: true
+    hadolint:
+      enabled: true
+chat:
+  auto_reply: true

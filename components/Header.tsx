@@ -43,6 +43,11 @@ export default function Header() {
               </Link>
             </li>
             <li>
+              <Link href="/gallery" className="text-gray-300 hover:text-white transition-colors">
+                갤러리
+              </Link>
+            </li>
+            <li>
               <a
                 href="https://www.netflix.com/title/82006516"
                 target="_blank"
@@ -105,7 +110,8 @@ export default function Header() {
                 {[
                   { href: '/', label: '홈' },
                   { href: '/teams', label: '참가국' },
-                  { href: '/episodes', label: '에피소드' }
+                  { href: '/episodes', label: '에피소드' },
+                  { href: '/gallery', label: '갤러리' }
                 ].map((item, index) => (
                   <motion.li
                     key={index}

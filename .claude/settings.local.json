@@ -15,7 +15,13 @@
       "mcp__playwright__browser_click",
       "mcp__playwright__browser_resize",
       "mcp__playwright__browser_take_screenshot",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(timeout /t 5)"
     ]
   }
 }
