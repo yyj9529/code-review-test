@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SocialShareProps {
   title?: string;
@@ -13,8 +13,12 @@ export default function SocialShare({
   description = '넷플릭스에서 만나는 Physical: Asia! 8개국 최강 엘리트들의 치열한 체력 경쟁을 확인하세요.'
 }: SocialShareProps) {
   const [showToast, setShowToast] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  useEffect(() => {
+    // Set URL only on client side to avoid hydration mismatch
+    setCurrentUrl(window.location.href);
+  }, []);
 
   const shareLinks = {
     twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(currentUrl)}`,
