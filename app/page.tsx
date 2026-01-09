@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SocialShare from '@/components/SocialShare';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
@@ -68,6 +69,14 @@ export default function Home() {
               >
                 참가국 보기
               </Link>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="mt-8 flex justify-center"
+            >
+              <SocialShare />
             </motion.div>
           </div>
         </section>
