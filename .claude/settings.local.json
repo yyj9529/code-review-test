@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --turbopack --use-npm)",
+      "Bash(npm install:*)",
+      "mcp__playwright__browser_navigate",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill /F /PID 13160)",
+      "Bash(taskkill //F //PID 13160)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout 8 cmd:*)",
+      "Bash(exit 0)",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_take_screenshot",
+      "WebSearch"
+    ]
+  }
+}
